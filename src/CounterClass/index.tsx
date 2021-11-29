@@ -12,17 +12,24 @@ class CounterClass extends Component<CounterClassProps, CounterClassState> {
   }
 
   increment = () => {
-    const { count } = this.state;
+    const { max, step } = this.props;
     // this.setState is asynchronous, this means that every call is going to get enqued, and if we have
     // multiple calls for the same key those are going to get "merged", (only the last one gets executed)
     // once the state is recalculated the component is re render.
-    this.setState({ count: count + 1 });
+    this.setState((state) => {
+      if (state.count >= max) return { count: state.count };
+      return { count: state.count + step };
+    });
   };
 
   addTen = () => {
+    const { max } = this.props;
     // when passing a function to this.setState there is no way to merge objects, that means that if we have
     // multiple calls all of them will get executed, and the state will get updated each time.
-    this.setState((state) => ({ count: state.count + 10 }));
+    this.setState((state) => {
+      if (state.count >= max) return { count: state.count };
+      return { count: state.count + 10 };
+    });
   };
 
   decrement() {
