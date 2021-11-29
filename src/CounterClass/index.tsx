@@ -1,6 +1,17 @@
 import React, { Component } from "react";
 import { CounterClassProps, CounterClassState } from "./types";
 
+// if the function to setState gets too complex you can extract it from the component class
+// to test it without having to mount the Component
+const increment = (
+  state: CounterClassState,
+  props: CounterClassProps
+): CounterClassState => {
+  const { max, step } = props;
+  if (state.count >= max) return { count: state.count };
+  return { count: state.count + step };
+};
+
 class CounterClass extends Component<CounterClassProps, CounterClassState> {
   constructor(props: CounterClassProps) {
     super(props);
@@ -12,14 +23,10 @@ class CounterClass extends Component<CounterClassProps, CounterClassState> {
   }
 
   increment = () => {
-    const { max, step } = this.props;
     // this.setState is asynchronous, this means that every call is going to get enqued, and if we have
     // multiple calls for the same key those are going to get "merged", (only the last one gets executed)
     // once the state is recalculated the component is re render.
-    this.setState((state) => {
-      if (state.count >= max) return { count: state.count };
-      return { count: state.count + step };
-    });
+    this.setState(increment);
   };
 
   addTen = () => {
@@ -34,7 +41,10 @@ class CounterClass extends Component<CounterClassProps, CounterClassState> {
 
   decrement() {
     const { count } = this.state;
-    this.setState({ count: count - 1 });
+    // this.setState can receive a function to execute after the state was updated.
+    this.setState({ count: count - 1 }, () => {
+      console.log("After", this.state);
+    });
   }
 
   reset() {
