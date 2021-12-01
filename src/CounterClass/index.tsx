@@ -32,40 +32,45 @@ class CounterClass extends Component<CounterClassProps, CounterClassState> {
   constructor(props: CounterClassProps) {
     super(props);
     this.state = getStateFromLocalStorage();
-
+    this.updateDocumentTitle();
     this.reset = this.reset.bind(this);
   }
+
+  updateDocumentTitle = () => {
+    const { count } = this.state;
+    document.title = `Count ${count}`;
+  };
+
+  postUpdateState = () => {
+    saveStateInLocalStorage(this.state);
+    this.updateDocumentTitle();
+  };
 
   increment = () => {
     // this.setState is asynchronous, this means that every call is going to get enqued, and if we have
     // multiple calls for the same key those are going to get "merged", (only the last one gets executed)
     // once the state is recalculated the component is re render.
-    this.setState(increment);
+    this.setState(increment, this.postUpdateState);
   };
 
   addTen = () => {
     const { max } = this.props;
     // when passing a function to this.setState there is no way to merge objects, that means that if we have
     // multiple calls all of them will get executed, and the state will get updated each time.
-    this.setState(
-      (state) => {
-        if (state.count >= max) return { count: state.count };
-        return { count: state.count + 10 };
-      },
-      () => saveStateInLocalStorage(this.state)
-    );
+    this.setState((state) => {
+      if (state.count >= max) return { count: state.count };
+      return { count: state.count + 10 };
+    }, this.postUpdateState);
   };
 
   decrement() {
     const { count } = this.state;
     // this.setState can receive a callback function to execute after the state was updated.
-    this.setState({ count: count - 1 }, () =>
-      saveStateInLocalStorage(this.state)
-    );
+    this.setState({ count: count - 1 }, this.postUpdateState);
   }
 
   reset() {
-    this.setState({ count: 0 }, () => saveStateInLocalStorage(this.state));
+    this.setState({ count: 0 }, this.postUpdateState);
   }
 
   render() {
