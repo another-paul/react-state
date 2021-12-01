@@ -1,6 +1,22 @@
 import React, { Component } from "react";
 import { CounterClassProps, CounterClassState } from "./types";
 
+const localStorageKey = "CounterState";
+
+const getStateFromLocalStorage = (): CounterClassState => {
+  const state = localStorage.getItem(localStorageKey);
+
+  if (state) {
+    return JSON.parse(state);
+  }
+
+  return { count: 0 };
+};
+
+const saveStateInLocalStorage = (state: CounterClassState) => {
+  localStorage.setItem(localStorageKey, JSON.stringify(state));
+};
+
 // if the function to setState gets too complex you can extract it from the component class
 // to test it without having to mount the Component
 const increment = (
@@ -15,9 +31,7 @@ const increment = (
 class CounterClass extends Component<CounterClassProps, CounterClassState> {
   constructor(props: CounterClassProps) {
     super(props);
-    this.state = {
-      count: 0,
-    };
+    this.state = getStateFromLocalStorage();
 
     this.reset = this.reset.bind(this);
   }
@@ -33,22 +47,25 @@ class CounterClass extends Component<CounterClassProps, CounterClassState> {
     const { max } = this.props;
     // when passing a function to this.setState there is no way to merge objects, that means that if we have
     // multiple calls all of them will get executed, and the state will get updated each time.
-    this.setState((state) => {
-      if (state.count >= max) return { count: state.count };
-      return { count: state.count + 10 };
-    });
+    this.setState(
+      (state) => {
+        if (state.count >= max) return { count: state.count };
+        return { count: state.count + 10 };
+      },
+      () => saveStateInLocalStorage(this.state)
+    );
   };
 
   decrement() {
     const { count } = this.state;
-    // this.setState can receive a function to execute after the state was updated.
-    this.setState({ count: count - 1 }, () => {
-      console.log("After", this.state);
-    });
+    // this.setState can receive a callback function to execute after the state was updated.
+    this.setState({ count: count - 1 }, () =>
+      saveStateInLocalStorage(this.state)
+    );
   }
 
   reset() {
-    this.setState({ count: 0 });
+    this.setState({ count: 0 }, () => saveStateInLocalStorage(this.state));
   }
 
   render() {
