@@ -31,6 +31,8 @@ const increment = (
 class CounterClass extends Component<CounterClassProps, CounterClassState> {
   constructor(props: CounterClassProps) {
     super(props);
+    // if you can calculate the value from the props or is not needed to render the component
+    // it SHOULDN'T be in the state
     this.state = getStateFromLocalStorage();
     this.updateDocumentTitle();
     this.reset = this.reset.bind(this);
