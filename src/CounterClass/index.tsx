@@ -62,6 +62,7 @@ class CounterClass extends Component<CounterClassProps, CounterClassState> {
     // when passing a function to this.setState there is no way to merge objects, that means that if we have
     // multiple calls all of them will get executed, and the state will get updated each time.
     this.setState((state) => {
+      // when working with JS, no TS, it is possible to not return nothing and the state wont change
       if (state.count >= max) return { count: state.count };
       return { count: state.count + 10 };
     }, this.postUpdateState);
