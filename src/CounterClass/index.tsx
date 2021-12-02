@@ -38,9 +38,13 @@ class CounterClass extends Component<CounterClassProps, CounterClassState> {
     this.reset = this.reset.bind(this);
   }
 
-  updateDocumentTitle = () => {
+  get documentTitle() {
     const { count } = this.state;
-    document.title = `Count ${count}`;
+    return `Count ${count}`;
+  }
+
+  updateDocumentTitle = () => {
+    document.title = this.documentTitle;
   };
 
   postUpdateState = () => {
