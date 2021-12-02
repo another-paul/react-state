@@ -8,8 +8,15 @@ const CounterFunction: React.FC<CounterFunctionProps> = ({
   const [count, setCount] = React.useState(0);
 
   const increment = () => {
-    if (count >= max) return;
-    setCount(count + step);
+    // the function we get to update the state from React.useState can receive a function as parameter, like this.setState in class components
+    // the difference is that it only receives the linked state property, it doesn't receive props as this.setState.
+
+    // one similarity with this.setState is that if we have multiple calls with a function as argunemtn, all of the calls update the state
+    setCount((c) => {
+      // when working with JS, no TS, be very careful, if there is no return value the state will get updated to undefined.
+      if (c >= max) return 0;
+      return c + step;
+    });
   };
   const addTen = () => {
     if (count >= max) return;
@@ -17,7 +24,7 @@ const CounterFunction: React.FC<CounterFunctionProps> = ({
   };
   function decrement() {
     // the function we get to update the state from React.useState is asynchronous and enqueues state changes.
-    // if it gets called multiple times the last call is the one that gets executed.
+    // if it gets called multiple times with a value the last call is the one that updates the state
     setCount(count - 1); // doesn't update count
     setCount(count - 2); // doesn't update count
     setCount(count - 1); // updates count
