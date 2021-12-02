@@ -53,9 +53,7 @@ class CounterClass extends Component<CounterClassProps, CounterClassState> {
   };
 
   increment = () => {
-    // this.setState is asynchronous, this means that every call is going to get enqued, and if we have
-    // multiple calls for the same key those are going to get "merged", (only the last one gets executed)
-    // once the state is recalculated the component is re render.
+    // this.setState can receive a callback function to execute after the state was updated.
     this.setState(increment, this.postUpdateState);
   };
 
@@ -71,7 +69,11 @@ class CounterClass extends Component<CounterClassProps, CounterClassState> {
 
   decrement() {
     const { count } = this.state;
-    // this.setState can receive a callback function to execute after the state was updated.
+    // this.setState is asynchronous, this means that every call is going to get enqued, and if we have
+    // multiple calls for the same key those are going to get "merged", (only the last one gets executed)
+    // once the state is recalculated the component is re render.
+    this.setState({ count: count - 1 }, this.postUpdateState);
+    this.setState({ count: count - 1 }, this.postUpdateState);
     this.setState({ count: count - 1 }, this.postUpdateState);
   }
 
