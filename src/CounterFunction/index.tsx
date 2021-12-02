@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { CounterFunctionProps } from "./types";
 
 const CounterFunction: React.FC<CounterFunctionProps> = ({
   max,
   step,
 }): React.ReactElement => {
-  const [count, setCount] = React.useState(0);
+  const [count, setCount] = useState(0);
 
   const increment = () => {
     // the function we get to update the state from React.useState can receive a function as parameter, like this.setState in class components
@@ -32,6 +32,15 @@ const CounterFunction: React.FC<CounterFunctionProps> = ({
   const reset = () => {
     setCount(0);
   };
+
+  // the function we get to update the state from React.useState can't receive a callback function as second parameter like this.setState
+  // we can use useEffect to accomplish something similar
+  // useEffect can receive 2 parameters, a function and an array of dependencies. The function will get executed every time a dependency changes
+  // if we don't set any dependency it will run on every render (if the function changes the state it will get loop)
+  // if the dependencies array is empty it will run only one time, when the component is mount, similar to componentDidMount
+  useEffect(() => {
+    document.title = `Functional Count: ${count}`;
+  }, [count]);
 
   return (
     <div>
