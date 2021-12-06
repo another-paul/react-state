@@ -1,27 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { CounterFunctionProps } from "./types";
+import useLocalStorage from "../hooks";
 
-const localStorageKey = "CounterFunctionState";
-
-const getStateFromLocalStorage = (): number => {
-  const state = localStorage.getItem(localStorageKey);
-
-  if (state) {
-    return JSON.parse(state).count;
-  }
-
-  return 0;
-};
-
-const saveCountInLocalStorage = (count: number) => {
-  localStorage.setItem(localStorageKey, JSON.stringify({ count }));
-};
+const localStorageKey = "count";
 
 const CounterFunction: React.FC<CounterFunctionProps> = ({
   max,
   step,
 }): React.ReactElement => {
-  const [count, setCount] = useState(getStateFromLocalStorage());
+  const [count, setCount] = useLocalStorage(0, localStorageKey);
 
   const increment = () => {
     // the function we get to update the state from React.useState can receive a function as parameter, like this.setState in class components
@@ -60,7 +47,7 @@ const CounterFunction: React.FC<CounterFunctionProps> = ({
 
   // You can have multiple useEffect with the same dependencies, to gain some modularity.
   useEffect(() => {
-    saveCountInLocalStorage(count);
+    console.log("State changed", count);
   }, [count]);
 
   return (
