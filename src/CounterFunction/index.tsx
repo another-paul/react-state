@@ -1,11 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { CounterFunctionProps } from "./types";
 
+const localStorageKey = "CounterFunctionState";
+
+const getStateFromLocalStorage = (): number => {
+  const state = localStorage.getItem(localStorageKey);
+
+  if (state) {
+    return JSON.parse(state).count;
+  }
+
+  return 0;
+};
+
+const saveCountInLocalStorage = (count: number) => {
+  localStorage.setItem(localStorageKey, JSON.stringify({ count }));
+};
+
 const CounterFunction: React.FC<CounterFunctionProps> = ({
   max,
   step,
 }): React.ReactElement => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(getStateFromLocalStorage());
 
   const increment = () => {
     // the function we get to update the state from React.useState can receive a function as parameter, like this.setState in class components
@@ -14,7 +30,7 @@ const CounterFunction: React.FC<CounterFunctionProps> = ({
     // one similarity with this.setState is that if we have multiple calls with a function as argunemtn, all of the calls update the state
     setCount((c) => {
       // when working with JS, no TS, be very careful, if there is no return value the state will get updated to undefined.
-      if (c >= max) return 0;
+      if (c >= max) return c;
       return c + step;
     });
   };
@@ -40,6 +56,11 @@ const CounterFunction: React.FC<CounterFunctionProps> = ({
   // if the dependencies array is empty it will run only one time, when the component is mount, similar to componentDidMount
   useEffect(() => {
     document.title = `Functional Count: ${count}`;
+  }, [count]);
+
+  // You can have multiple useEffect with the same dependencies, to gain some modularity.
+  useEffect(() => {
+    saveCountInLocalStorage(count);
   }, [count]);
 
   return (
