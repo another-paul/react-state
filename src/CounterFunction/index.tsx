@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CounterFunctionProps } from "./types";
 import useLocalStorage from "../hooks";
 
@@ -9,6 +9,17 @@ const CounterFunction: React.FC<CounterFunctionProps> = ({
   step,
 }): React.ReactElement => {
   const [count, setCount] = useLocalStorage(0, localStorageKey);
+  const countRef = useRef<number>();
+
+  const [message, setMessage] = useState("---");
+  useEffect(() => {
+    if (countRef.current !== undefined && countRef.current > count) {
+      setMessage("Lower");
+    }
+    if (countRef.current !== undefined && countRef.current < count) {
+      setMessage("Higher");
+    }
+  }, [count]);
 
   const increment = () => {
     // the function we get to update the state from React.useState can receive a function as parameter, like this.setState in class components
@@ -47,12 +58,15 @@ const CounterFunction: React.FC<CounterFunctionProps> = ({
 
   // You can have multiple useEffect with the same dependencies, to gain some modularity.
   useEffect(() => {
-    console.log("State changed", count);
-  }, [count]);
+    console.log("State changed", count, message);
+    // A reference can let us persist the state, so we can compare previous and current value;
+    countRef.current = count;
+  }, [count, message]);
 
   return (
     <div>
       <p>Counter Function:</p>
+      <p>{`The new value is ${message}`}</p>
       <p>{count}</p>
       <span>
         <button type="button" onClick={increment}>
