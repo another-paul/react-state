@@ -63,6 +63,18 @@ const CounterFunction: React.FC<CounterFunctionProps> = ({
     countRef.current = count;
   }, [count, message]);
 
+  useEffect(() => {
+    const id = setInterval(() => {
+      console.log(`Le count: ${count}`);
+    }, 1000);
+    // We can return a callback function that will get executed the next time the dependecy changes.
+    // In this way we can perform any cleanup action, like close sockets
+    return () => {
+      console.log("clearing interval", id);
+      clearInterval(id);
+    };
+  }, [count]);
+
   return (
     <div>
       <p>Counter Function:</p>
