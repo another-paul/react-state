@@ -12,7 +12,7 @@ const useLocalStorage = <S>(initialState: S, key: string): [S, Dispatch<SetState
 
     useEffect(()=>{
         localStorage.setItem(key, JSON.stringify({value}));
-    })
+    }, [value]);
 
     return [value, getValue];
 };
