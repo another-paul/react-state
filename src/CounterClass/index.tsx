@@ -1,5 +1,13 @@
 import React, { Component } from "react";
+import withStyles from "react-jss";
 import { CounterClassProps, CounterClassState } from "./types";
+
+const styles = {
+  counterAction: {
+    margin: "0 6px",
+    fontSize: "16px",
+  },
+};
 
 const localStorageKey = "CounterState";
 
@@ -84,22 +92,39 @@ class CounterClass extends Component<CounterClassProps, CounterClassState> {
 
   render() {
     const { count } = this.state;
+    const { classes } = this.props;
 
     return (
       <div>
         <p>Counter Class:</p>
         <p>{count}</p>
         <span>
-          <button type="button" onClick={this.increment}>
+          <button
+            className={classes.counterAction}
+            type="button"
+            onClick={this.increment}
+          >
             Increment
           </button>
-          <button type="button" onClick={this.addTen}>
+          <button
+            className={classes.counterAction}
+            type="button"
+            onClick={this.addTen}
+          >
             Add 10
           </button>
-          <button type="button" onClick={() => this.decrement()}>
+          <button
+            className={classes.counterAction}
+            type="button"
+            onClick={() => this.decrement()}
+          >
             Decrement
           </button>
-          <button type="button" onClick={this.reset}>
+          <button
+            className={classes.counterAction}
+            type="button"
+            onClick={this.reset}
+          >
             Reset
           </button>
         </span>
@@ -108,4 +133,4 @@ class CounterClass extends Component<CounterClassProps, CounterClassState> {
   }
 }
 
-export default CounterClass;
+export default withStyles(styles)(CounterClass);

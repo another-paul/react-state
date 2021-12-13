@@ -1,6 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
+import { createUseStyles } from "react-jss";
 import { CounterFunctionProps } from "./types";
 import useLocalStorage from "../hooks";
+
+const useStyles = createUseStyles({
+  counterAction: {
+    margin: "0 6px",
+    fontSize: "16px",
+  },
+});
 
 const localStorageKey = "count";
 
@@ -8,6 +16,7 @@ const CounterFunction: React.FC<CounterFunctionProps> = ({
   max,
   step,
 }): React.ReactElement => {
+  const classes = useStyles();
   const [count, setCount] = useLocalStorage(0, localStorageKey);
   const countRef = useRef<number>();
 
@@ -81,16 +90,28 @@ const CounterFunction: React.FC<CounterFunctionProps> = ({
       <p>{`The new value is ${message}`}</p>
       <p>{count}</p>
       <span>
-        <button type="button" onClick={increment}>
+        <button
+          className={classes.counterAction}
+          type="button"
+          onClick={increment}
+        >
           Increment
         </button>
-        <button type="button" onClick={addTen}>
+        <button
+          className={classes.counterAction}
+          type="button"
+          onClick={addTen}
+        >
           Add 10
         </button>
-        <button type="button" onClick={decrement}>
+        <button
+          className={classes.counterAction}
+          type="button"
+          onClick={decrement}
+        >
           Decrement
         </button>
-        <button type="button" onClick={reset}>
+        <button className={classes.counterAction} type="button" onClick={reset}>
           Reset
         </button>
       </span>
