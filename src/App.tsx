@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import { createUseStyles } from "react-jss";
-import logo from "./logo.svg";
 import "./App.css";
+
+import React, { useState } from "react";
+
+import { createUseStyles } from "react-jss";
+
+import AnimeList from "./AnimeList";
 import CounterClass from "./CounterClass";
 import CounterFunction from "./CounterFunction";
+import logo from "./logo.svg";
 
 const useStyles = createUseStyles({
   componentSelector: {
@@ -23,6 +27,8 @@ function App() {
     currentComponent = <CounterClass max={50} step={2} />;
   } else if (component === "counterFunction") {
     currentComponent = <CounterFunction max={50} step={2} />;
+  } else if (component === "animeList") {
+    currentComponent = <AnimeList />;
   }
 
   return (

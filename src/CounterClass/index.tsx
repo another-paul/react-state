@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+
 import withStyles from "react-jss";
+
 import { CounterClassProps, CounterClassState } from "./types";
 
 const styles = {

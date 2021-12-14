@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import { createUseStyles } from "react-jss";
-import { CounterFunctionProps } from "./types";
+
 import useLocalStorage from "../hooks";
+import { CounterFunctionProps } from "./types";
 
 const useStyles = createUseStyles({
   counterAction: {
