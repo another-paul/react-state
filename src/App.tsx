@@ -35,38 +35,38 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <div>
-          <button
-            className={classes.componentSelector}
-            type="button"
-            onClick={() => setComponent("counterClass")}
-          >
-            Counter using Class components
-          </button>
-          <button
-            className={classes.componentSelector}
-            type="button"
-            onClick={() => setComponent("counterFunction")}
-          >
-            Counter using Functional components
-          </button>
-          <button
-            className={classes.componentSelector}
-            type="button"
-            onClick={() => setComponent("animeList")}
-          >
-            Anime list
-          </button>
-          <button
-            className={classes.componentSelector}
-            type="button"
-            onClick={() => setComponent("animeListReducer")}
-          >
-            Anime list using Reducer pattern
-          </button>
-        </div>
-        {currentComponent}
       </header>
+      <div>
+        <button
+          className={classes.componentSelector}
+          type="button"
+          onClick={() => setComponent("counterClass")}
+        >
+          Counter using Class components
+        </button>
+        <button
+          className={classes.componentSelector}
+          type="button"
+          onClick={() => setComponent("counterFunction")}
+        >
+          Counter using Functional components
+        </button>
+        <button
+          className={classes.componentSelector}
+          type="button"
+          onClick={() => setComponent("animeList")}
+        >
+          Anime list
+        </button>
+        <button
+          className={classes.componentSelector}
+          type="button"
+          onClick={() => setComponent("animeListReducer")}
+        >
+          Anime list using Reducer pattern
+        </button>
+      </div>
+      {currentComponent}
     </div>
   );
 }
