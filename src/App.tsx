@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { createUseStyles } from "react-jss";
 
 import AnimeList from "./AnimeList";
+import AnimeListReducer from "./AnimeListReducer";
 import CounterClass from "./CounterClass";
 import CounterFunction from "./CounterFunction";
 import logo from "./logo.svg";
@@ -29,6 +30,8 @@ function App() {
     currentComponent = <CounterFunction max={50} step={2} />;
   } else if (component === "animeList") {
     currentComponent = <AnimeList />;
+  } else if (component === "animeListReducer") {
+    currentComponent = <AnimeListReducer />;
   }
 
   return (
