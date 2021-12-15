@@ -3,7 +3,7 @@ import React, { useReducer } from "react";
 import { createUseStyles } from "react-jss";
 import { v4 as uuidv4 } from "uuid";
 
-import AnimeCard from "../AnimeCard";
+import AnimeCard from "./AnimeCard";
 import { ANIME_ADD, ANIME_WATCHED } from "./constants";
 import NewAnime from "./NewAnime";
 import { Anime, AnimeListAction } from "./types";

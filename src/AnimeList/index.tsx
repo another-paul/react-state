@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { createUseStyles } from "react-jss";
 import { v4 as uuidv4 } from "uuid";
 
-import AnimeCard from "../AnimeCard";
+import AnimeCard from "./AnimeCard";
 import { Anime } from "./types";
 
 const defaultAnimes: Anime[] = [
