@@ -1,10 +1,11 @@
-import React, { useState, useReducer } from "react";
+import React, { useReducer } from "react";
 
 import { createUseStyles } from "react-jss";
 import { v4 as uuidv4 } from "uuid";
 
 import AnimeCard from "../AnimeCard";
 import { ANIME_ADD, ANIME_WATCHED } from "./constants";
+import NewAnime from "./NewAnime";
 import { Anime, AnimeListAction } from "./types";
 
 const defaultAnimes: Anime[] = [
@@ -52,30 +53,17 @@ const reducer = (state: Anime[], action: AnimeListAction): Anime[] => {
 
 const AnimeListReducer: React.FC = () => {
   const [animes, dispatch] = useReducer(reducer, defaultAnimes);
-  const [animeName, setAnimeName] = useState("");
   const classes = useStyles();
 
-  const handleAnimeNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { value } = event.target;
-    setAnimeName(value);
-  };
-
-  const handleAddAnime = () => {
+  const handleAddAnime = (anime: Anime) => {
     dispatch(
       // the only requirements for the object is that it contains a "type" key
       // the rest is free
       {
         type: ANIME_ADD,
-        payload: {
-          id: uuidv4(),
-          name: animeName,
-          watched: false,
-        },
+        payload: anime,
       }
     );
-    setAnimeName("");
   };
 
   const handleAnimeWatched = (id: string) => () => {
@@ -89,17 +77,8 @@ const AnimeListReducer: React.FC = () => {
 
   return (
     <div className={classes.list}>
-      <div>
-        <input
-          type="text"
-          placeholder="name"
-          value={animeName}
-          onChange={handleAnimeNameChange}
-        />
-        <button type="button" onClick={handleAddAnime}>
-          Add New Anime
-        </button>
-      </div>
+      {/* By moving the form to its own component we avoid rerendering the whole list when we type something since the name input is connected to the state */}
+      <NewAnime onAddAnime={handleAddAnime} />
 
       <h2>Animes: {animes.length}</h2>
 
