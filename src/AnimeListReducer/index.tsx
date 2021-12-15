@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useCallback } from "react";
 
 import { createUseStyles } from "react-jss";
 import { v4 as uuidv4 } from "uuid";
@@ -55,25 +55,39 @@ const AnimeListReducer: React.FC = () => {
   const [animes, dispatch] = useReducer(reducer, defaultAnimes);
   const classes = useStyles();
 
-  const handleAddAnime = (anime: Anime) => {
-    dispatch(
-      // the only requirements for the object is that it contains a "type" key
-      // the rest is free
-      {
-        type: ANIME_ADD,
-        payload: anime,
-      }
-    );
-  };
+  // With useCallback we get the same callback function each time unless one of its dependencies changes.
+  // We this we can take advatange of React.memo since we ensure that the function didn't change, internally is the same function
+  // same memory reference.
+  const handleAddAnime = useCallback(
+    (anime: Anime) => {
+      dispatch(
+        // the only requirements for the object is that it contains a "type" key
+        // the rest is free
+        {
+          type: ANIME_ADD,
+          payload: anime,
+        }
+      );
+    },
+    // We can't use useCallback when we use useState because the function will also depend on the animes list
+    // and since the anime list changes constantly we will get a new function every single time, by consequence the props
+    // of the other components will change and trigger a rerender.
+    [dispatch]
+  );
 
-  const handleAnimeWatched = (id: string) => () => {
-    dispatch({
-      type: ANIME_WATCHED,
-      payload: {
-        id,
-      },
-    });
-  };
+  // A React hook, like useCallback must be called on top level function, that means that we can't call it inside another function.
+  // If we do that we have the risk of "rendering" a different amount of hooks during execution.
+  const handleAnimeWatched = useCallback(
+    (id: Anime["id"]) => {
+      dispatch({
+        type: ANIME_WATCHED,
+        payload: {
+          id,
+        },
+      });
+    },
+    [dispatch]
+  );
 
   return (
     <div className={classes.list}>
@@ -89,7 +103,7 @@ const AnimeListReducer: React.FC = () => {
             id={anime.id}
             name={anime.name}
             watched={anime.watched}
-            onWatchedClick={handleAnimeWatched(anime.id)}
+            onWatchedClick={handleAnimeWatched}
           />
         ))}
       </div>

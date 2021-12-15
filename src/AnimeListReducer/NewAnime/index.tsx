@@ -4,39 +4,46 @@ import { v4 as uuidv4 } from "uuid";
 
 import { NewAnimeProps } from "./types";
 
-const NewAnime: React.FC<NewAnimeProps> = ({ onAddAnime }) => {
-  const [animeName, setAnimeName] = useState("");
+// By using React.memo we prevent the component from rerendering if its props didn't change
+// If the props of the component change constantly there React.memo will make performance worse,
+// it is going to check and rerender every single time.
+const NewAnime: React.FC<NewAnimeProps> = React.memo(
+  ({ onAddAnime }: NewAnimeProps) => {
+    const [animeName, setAnimeName] = useState("");
 
-  const handleAnimeNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { value } = event.target;
-    setAnimeName(value);
-  };
+    const handleAnimeNameChange = (
+      event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+      const { value } = event.target;
+      setAnimeName(value);
+    };
 
-  const handleAddAnime = () => {
-    onAddAnime({
-      id: uuidv4(),
-      name: animeName,
-      watched: false,
-    });
+    const handleAddAnime = () => {
+      onAddAnime({
+        id: uuidv4(),
+        name: animeName,
+        watched: false,
+      });
 
-    setAnimeName("");
-  };
+      setAnimeName("");
+    };
 
-  return (
-    <div>
-      <input
-        type="text"
-        placeholder="name"
-        value={animeName}
-        onChange={handleAnimeNameChange}
-      />
-      <button type="button" onClick={handleAddAnime}>
-        Add New Anime
-      </button>
-    </div>
-  );
-};
+    console.log("Rendering new anime");
+
+    return (
+      <div>
+        <input
+          type="text"
+          placeholder="name"
+          value={animeName}
+          onChange={handleAnimeNameChange}
+        />
+        <button type="button" onClick={handleAddAnime}>
+          Add New Anime
+        </button>
+      </div>
+    );
+  }
+);
 
 export default NewAnime;

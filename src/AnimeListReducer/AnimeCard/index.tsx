@@ -22,31 +22,32 @@ const useStyles = createUseStyles({
   },
 });
 
-const AnimeCard: React.FC<AnimeCardProps> = ({
-  id,
-  name,
-  watched,
-  onWatchedClick,
-}) => {
-  const classes = useStyles();
-  console.log("Rendering", id);
-  
-  return (
-    <div className={classes.card}>
-      <h3 className={classes.name}>{name}</h3>
-      <div className={classes.watchedContainer}>
-        <label htmlFor={id}>
-          Watched
-          <input
-            id={id}
-            type="checkbox"
-            checked={watched}
-            onChange={onWatchedClick}
-          />
-        </label>
+const AnimeCard: React.FC<AnimeCardProps> = React.memo(
+  ({ id, name, watched, onWatchedClick }: AnimeCardProps) => {
+    const classes = useStyles();
+    console.log("Rendering", id);
+
+    const handleAnimeWatched = () => {
+      onWatchedClick(id);
+    };
+
+    return (
+      <div className={classes.card}>
+        <h3 className={classes.name}>{name}</h3>
+        <div className={classes.watchedContainer}>
+          <label htmlFor={id}>
+            Watched
+            <input
+              id={id}
+              type="checkbox"
+              checked={watched}
+              onChange={handleAnimeWatched}
+            />
+          </label>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
 export default AnimeCard;
