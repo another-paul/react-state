@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import { createUseStyles } from "react-jss";
 
 import AnimeList from "./AnimeList";
+import AnimeListContext from "./AnimeListContext";
+import AnimeContextProvider from "./AnimeListContext/AnimeContextProvider";
 import AnimeListReducer from "./AnimeListReducer";
 import CounterClass from "./CounterClass";
 import CounterFunction from "./CounterFunction";
@@ -32,6 +34,12 @@ function App() {
     currentComponent = <AnimeList />;
   } else if (component === "animeListReducer") {
     currentComponent = <AnimeListReducer />;
+  } else if (component === "animeListContext") {
+    currentComponent = (
+      <AnimeContextProvider>
+        <AnimeListContext />
+      </AnimeContextProvider>
+    );
   }
 
   return (
@@ -67,6 +75,13 @@ function App() {
           onClick={() => setComponent("animeListReducer")}
         >
           Anime list using Reducer pattern
+        </button>
+        <button
+          className={classes.componentSelector}
+          type="button"
+          onClick={() => setComponent("animeListContext")}
+        >
+          Anime list using Context
         </button>
       </div>
       {currentComponent}
